@@ -1,6 +1,6 @@
 import { Markup, Telegraf } from "telegraf";
-import { Command } from "./command.class";
-import { ILogger } from "../logger";
+import { Command } from "../Command";
+import { ILogger } from "../../logger";
 
 export class StartCommand extends Command {
     constructor(bot: Telegraf, logger: ILogger) {
@@ -9,11 +9,11 @@ export class StartCommand extends Command {
 
     handle(): void {
         this.bot.start(async (ctx) => {
-            this.logger.logAction('Старт', ctx.update.message.from)
+          this.logger.logAction('Старт', ctx.update.message.from)
 
-            const name = ctx.update.message.from.first_name;
+          const name = ctx.update.message.from.first_name;
 
-            ctx.replyWithPhoto(
+          ctx.replyWithPhoto(
                "https://i.ibb.co/4jk1tyM/1.png",
                 {
                   caption: `*Добро пожаловать, ${name}*` + "\n \n" +
@@ -29,13 +29,13 @@ export class StartCommand extends Command {
                     Markup.button.callback('Открыть функции', 'open_functions'), 
                   ]) 
                 }
-            )
+          )
         })
 
         this.bot.action('open_functions', async (ctx) => {
             this.logger.logAction('Открыть функции', ctx.from)
 
-            ctx.replyWithPhoto(
+            await ctx.replyWithPhoto(
                 "https://i.ibb.co/68xZ109/2.png",
                  {
                    caption: '*На связи DesignBot*' + "\n \n" +
@@ -44,11 +44,33 @@ export class StartCommand extends Command {
                    '💜 Твоя поддержка улучшит меня и сэкономит тебе кучу денег и сил',
                    parse_mode: 'MarkdownV2',
                    ...Markup.inlineKeyboard([ 
-                        Markup.button.callback('🎁 Получить подарок', 'get_gift')
-                   ]) 
+                      Markup.button.callback('🎁 Получить подарок', 'get_gift')
+                   ]),
                  }
             )
+
+            await ctx.reply('↗️ Выберите функцию', Markup.keyboard([
+              ['📥 Запросить файл'],
+              ['💎 Полный доступ'],
+              ['🔐 Функции в разработке'],
+              ['💰 Заработок', 'ℹ️ Информация']
+            ]).oneTime().resize())
         })
+
+        this.bot.action('get_gift', async (ctx) => {
+          this.logger.logAction('Получить подарок', ctx.from)
+
+          ctx.editMessageMedia({
+            media: "https://i.ibb.co/Hq2VBvt/3.png",
+            type: 'photo',
+            caption: '*Отлично\\! 🎉*' + "\n \n" +
+            'Твой подарок открыт \\- используй каждую мою функцию 1 раз' + "\n \n" +
+            '👾 Буду рад оказать их максимально круто' + "\n \n" +
+            '\\*На данный момент доступна функция запроса файла',
+            parse_mode: 'MarkdownV2'
+          })
+        })
+        
     }
 }
 

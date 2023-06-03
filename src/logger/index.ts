@@ -8,8 +8,6 @@ export interface ILogger {
 }
 
 export class Logger implements ILogger{
-    constructor() {}
-
     log(message: string, type: ILogType = 'info') {
         console.log(`LOG | ${type} | ${message}`)
     }

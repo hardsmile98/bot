@@ -1,8 +1,8 @@
 import { Telegraf, session } from "telegraf";
 import { IConfigService } from "./config/config.interface";
 import { ConfigService } from "./config/config.service"
-import { Command } from "./commands/command.class";
-import { StartCommand } from "./commands/start.command";
+import { Command } from "./commands/Command";
+import { StartCommand } from "./commands/Start";
 import { ILogger, Logger } from "./logger";
 
 class Bot {
