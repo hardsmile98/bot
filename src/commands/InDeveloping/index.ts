@@ -27,7 +27,6 @@ export class InDeveloping extends Command {
                    parse_mode: 'MarkdownV2',
                 }
            )
-           await this.sendMenu(ctx)
         })
     }
 }

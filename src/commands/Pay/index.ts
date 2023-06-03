@@ -28,7 +28,6 @@ export class Pay extends Command {
                   ]) 
                 }
            )
-           await this.sendMenu(ctx)
         })
     }
 }

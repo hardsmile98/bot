@@ -49,7 +49,11 @@ export class StartCommand extends Command {
                  }
             )
 
-            await this.sendMenu(ctx)
+            ctx.reply('↘️ Выберите функцию', Markup.keyboard([
+              ['📥 Запросить файл'],
+              ['💎 Полный доступ'],
+              ['🔐 Функции в разработке'],
+            ]).resize())
         })
 
         this.bot.action('get_gift', async (ctx) => {

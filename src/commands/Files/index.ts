@@ -102,9 +102,5 @@ export class Files extends Command {
                 inline_keyboard: this.servicesButtons(),
             })
         })
-
-        this.bot.action('menu', async (ctx) => {
-            this.sendMenu(ctx)
-        })
     }
 }
