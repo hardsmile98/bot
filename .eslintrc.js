@@ -7,9 +7,16 @@ module.exports = {
   overrides: [
   ],
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module'
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
+    ecmaVersion: 'latest'
   },
   rules: {
+    'no-useless-escape': 'off',
+    'no-useless-constructor': 'off',
+    '@typescript-eslint/no-useless-constructor': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/restrict-template-expressions': 'off'
   }
 }

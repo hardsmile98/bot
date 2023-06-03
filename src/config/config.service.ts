@@ -1,30 +1,30 @@
-import { DotenvParseOutput, config } from "dotenv";
-import { IConfigService } from "./config.interface";
+import { type DotenvParseOutput, config } from 'dotenv'
+import { type IConfigService } from './config.interface'
 
 export class ConfigService implements IConfigService {
-    private config: DotenvParseOutput
+  private readonly config: DotenvParseOutput
 
-    constructor() {
-        const { error, parsed } = config();
+  constructor () {
+    const { error, parsed } = config()
 
-        if(error) {
-            throw new Error('No read env')
-        }
-
-        if(!parsed) {
-            throw new Error('env is empty')
-        }
-
-        this.config = parsed;
+    if (error != null) {
+      throw new Error('No read env')
     }
 
-    get(key: string): string {
-        const res =  this.config[key];
-
-        if(!res) {
-            throw new Error('Not exist key')
-        }
-
-        return res;
+    if (parsed == null) {
+      throw new Error('env is empty')
     }
+
+    this.config = parsed
+  }
+
+  get (key: string): string {
+    const res = this.config[key]
+
+    if (res.length === 0) {
+      throw new Error('Not exist key')
+    }
+
+    return res
+  }
 }
