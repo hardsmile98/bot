@@ -22,7 +22,6 @@ export class Files extends Command {
                 Markup.button.callback('Pixsellz', services.pixsellz),
                 Markup.button.callback('Spline.one', services.spline),
             ],
-            [Markup.button.callback('⬅️ Назад', 'menu')]
           ]
     }
 
