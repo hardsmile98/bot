@@ -4,6 +4,9 @@ import { ConfigService } from "./config/config.service"
 import { Command } from "./commands/Command";
 import { StartCommand } from "./commands/Start";
 import { ILogger, Logger } from "./logger";
+import { InDeveloping } from "./commands/InDeveloping";
+import { Pay } from "./commands/Pay";
+import { Files } from "./commands/Files";
 
 class Bot {
     bot: Telegraf
@@ -20,6 +23,9 @@ class Bot {
         
         this.commands = [
             new StartCommand(this.bot, this.logger),
+            new InDeveloping(this.bot, this.logger),
+            new Pay(this.bot, this.logger),
+            new Files(this.bot, this.logger),
         ]
 
         for(const command of this.commands) {
