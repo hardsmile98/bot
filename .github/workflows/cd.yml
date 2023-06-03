@@ -21,4 +21,5 @@ jobs:
           git pull origin main
           git status
           npm i
+          npm run build
           pm2 restart app
