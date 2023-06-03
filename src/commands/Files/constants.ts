@@ -35,12 +35,15 @@ const data = {
   },
   [services.spline]: {
     image: 'https://i.ibb.co/d77jSgY/10.png',
-    title: 'Spline',
-    url: 'https://spline.design'
+    title: 'Spline one',
+    url: 'https://www.spline.one'
   }
 }
 
+const regexUrl = /ui8\.net|craftwork\.design|ls\.graphics|uihut\.com|pixsellz\.io|spline\.one/
+
 export {
   services,
+  regexUrl,
   data
 }

@@ -1,7 +1,7 @@
 import { type Context, Markup, type Telegraf } from 'telegraf'
 import { Command } from '../Command'
 import { type ILogger } from '../../logger'
-import { services, data } from './constants'
+import { services, data, regexUrl } from './constants'
 
 export class Files extends Command {
   constructor (bot: Telegraf, logger: ILogger) {
@@ -16,12 +16,12 @@ export class Files extends Command {
         Markup.button.callback('CRAFTWORK', services.craftwork)
       ],
       [
-        Markup.button.callback('LS. Graphics', services.ls_graphics),
+        Markup.button.callback('LS. GRAPHICS', services.ls_graphics),
         Markup.button.callback('UIHUNT', services.uihunt)
       ],
       [
-        Markup.button.callback('Pixsellz', services.pixsellz),
-        Markup.button.callback('Spline.one', services.spline)
+        Markup.button.callback('PIXSELLZ', services.pixsellz),
+        Markup.button.callback('SPLINE.ONE', services.spline)
       ]
     ]
   }
@@ -116,6 +116,46 @@ export class Files extends Command {
         })
       } catch (e) {
         this.logger.log('error in select services', 'error')
+      }
+    })
+
+    // Ответ на ссылку
+    this.bot.hears(regexUrl, async (ctx) => {
+      const match = ctx.match[0]
+      console.log(match)
+
+      const isFound = false
+
+      try {
+        if (!isFound) {
+          await ctx.replyWithPhoto(
+            'https://i.ibb.co/C2GvWmt/13.png',
+            {
+              caption: '*📂 По вашему запросу файл не найден*' + '\n \n' +
+                'Мы взяли в работу данный файл, бот автоматически выдаст его как только мы добавим его в нашу базу или решим проблему с ним' + '\n \n' +
+                '\\(обновление происходит каждый день\\)' + '\n \n' +
+                '↘️ Вы можете скачать другой файл, вставив новую ссылку',
+              parse_mode: 'MarkdownV2'
+            }
+          )
+
+          return
+        }
+
+        await ctx.replyWithPhoto(
+          'https://i.ibb.co/MNspL88/12.png',
+          {
+            caption: '*По вашему запросу найден файл*' + '\n \n' +
+              '*Hand\\-hand Handsome*' + '\n' +
+              'Размер файла: 91\\.6 MB' + '\n \n' +
+              'Стоимость файла на сайте: 10$' + '\n \n' +
+              '📥 Скачать: [Выполнить загрузку](https://ui8.net)' + '\n \n' +
+              '↘️ Вы можете скачать еще файл, вставив новую ссылку',
+            parse_mode: 'MarkdownV2'
+          }
+        )
+      } catch (e) {
+        this.logger.log('error in get url', 'error')
       }
     })
   }
