@@ -14,7 +14,7 @@ export class Logger implements ILogger {
 
   logAction (actionName: string, user?: User) {
     this.log(`action: ${actionName}, ${(user !== undefined)
-            ? `userID: ${user.id}, ${user.first_name} ${user.last_name}`
-            : ''}`)
+      ? `userID: ${user.id}, ${user.first_name} ${user.last_name}`
+      : ''}`)
   }
 }

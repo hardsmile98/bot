@@ -45,6 +45,10 @@ export class Files extends Command {
     )
   }
 
+  async checkPaid (ctx: Context) {
+    return true
+  }
+
   handle (): void {
     // Запросить файлы
     this.bot.hears('📥 Запросить файл', async (ctx) => {
@@ -52,9 +56,23 @@ export class Files extends Command {
 
       try {
         await ctx.deleteMessage()
+      } catch (e) {
+        this.logger.log(`error in get files: ${e}`, 'error')
+      }
+
+      try {
+        const isPaid = await this.checkPaid(ctx)
+
+        if (!isPaid) return
+      } catch (e) {
+        this.logger.log(`error checkPaid in get files: ${e}`, 'error')
+        return
+      }
+
+      try {
         await this.selectServices(ctx)
       } catch (e) {
-        this.logger.log('error in get files', 'error')
+        this.logger.log(`error in get files: ${e}`, 'error')
       }
     })
 
@@ -92,7 +110,7 @@ export class Files extends Command {
           ]
         })
       } catch (e) {
-        this.logger.log(`error in ${serviceName}`, 'error')
+        this.logger.log(`error in ${serviceName}, ${e}`, 'error')
       }
     })
 
@@ -121,6 +139,15 @@ export class Files extends Command {
 
     // Ответ на ссылку
     this.bot.hears(regexUrl, async (ctx) => {
+      try {
+        const isPaid = await this.checkPaid(ctx)
+
+        if (!isPaid) return
+      } catch (e) {
+        this.logger.log(`error checkPaid in get url: ${e}`, 'error')
+        return
+      }
+
       const match = ctx.match[0]
       console.log(match)
 
@@ -141,7 +168,12 @@ export class Files extends Command {
 
           return
         }
+      } catch (e) {
+        this.logger.log(`error in get url: ${e}`, 'error')
+        return
+      }
 
+      try {
         await ctx.replyWithPhoto(
           'https://i.ibb.co/MNspL88/12.png',
           {
@@ -155,7 +187,7 @@ export class Files extends Command {
           }
         )
       } catch (e) {
-        this.logger.log('error in get url', 'error')
+        this.logger.log(`error in get url: ${e}`, 'error')
       }
     })
   }

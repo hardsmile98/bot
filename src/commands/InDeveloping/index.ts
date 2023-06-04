@@ -31,7 +31,7 @@ export class InDeveloping extends Command {
           }
         )
       } catch (e) {
-        this.logger.log('error in developing', 'error')
+        this.logger.log(`error in developing: ${e}`, 'error')
       }
     })
   }

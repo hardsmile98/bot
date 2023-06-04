@@ -61,7 +61,7 @@ export class StartCommand extends Command {
           ['🔐 Функции в разработке']
         ]).resize())
       } catch (e) {
-        this.logger.log('error in open functions', 'error')
+        this.logger.log(`error in open functions: ${e}`, 'error')
       }
     })
 
@@ -80,7 +80,7 @@ export class StartCommand extends Command {
           parse_mode: 'MarkdownV2'
         })
       } catch (e) {
-        this.logger.log('error in get gift', 'error')
+        this.logger.log(`error in get gift: ${e}', 'error`)
       }
     })
   }
