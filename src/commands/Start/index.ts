@@ -1,10 +1,11 @@
 import { Markup, type Telegraf } from 'telegraf'
 import { Command } from '../Command'
 import { type ILogger } from '../../logger'
+import { type IApi } from '../../services/api'
 
 export class StartCommand extends Command {
-  constructor (bot: Telegraf, logger: ILogger) {
-    super(bot, logger)
+  constructor (bot: Telegraf, logger: ILogger, api: IApi) {
+    super(bot, logger, api)
   }
 
   handle (): void {

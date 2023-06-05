@@ -2,10 +2,11 @@ import { type Context, Markup, type Telegraf } from 'telegraf'
 import { Command } from '../Command'
 import { type ILogger } from '../../logger'
 import { services, data, regexUrl } from './constants'
+import { type IApi } from '../../services/api'
 
 export class Files extends Command {
-  constructor (bot: Telegraf, logger: ILogger) {
-    super(bot, logger)
+  constructor (bot: Telegraf, logger: ILogger, api: IApi) {
+    super(bot, logger, api)
   }
 
   // Кнопки сервисов
@@ -179,7 +180,6 @@ export class Files extends Command {
           {
             caption: '*По вашему запросу найден файл*' + '\n \n' +
               '*Hand\\-hand Handsome*' + '\n' +
-              'Размер файла: 91\\.6 MB' + '\n \n' +
               'Стоимость файла на сайте: 10$' + '\n \n' +
               '📥 Скачать: [Выполнить загрузку](https://ui8.net)' + '\n \n' +
               '↘️ Вы можете скачать еще файл, вставив новую ссылку',
