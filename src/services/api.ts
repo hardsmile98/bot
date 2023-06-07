@@ -1,8 +1,8 @@
 interface IUser {
   userId: string
   firstName: string
-  lastName: string
-  userName: string
+  lastName?: string
+  userName?: string
   chatId: string
 }
 
@@ -43,7 +43,7 @@ export class Api implements IApi {
   }
 
   async getFile (userId: string, url: string) {
-    console.log(`checkPaid: ${JSON.stringify(userId)}`)
+    console.log(`getFile: ${JSON.stringify(userId)}`)
 
     return {
       title: 'Hand-hand Handsome',

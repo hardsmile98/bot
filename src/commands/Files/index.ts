@@ -1,7 +1,13 @@
 import { type Context, Markup, type Telegraf } from 'telegraf'
 import { Command } from '../Command'
+import { escape } from '../../helpers'
 import { type ILogger } from '../../logger'
-import { services, data, regexUrl } from './constants'
+import {
+  services,
+  dataServices,
+  regexUrl,
+  matchServices, type IKeyMatchSevice
+} from './constants'
 import { type IApi } from '../../services/api'
 
 export class Files extends Command {
@@ -46,10 +52,6 @@ export class Files extends Command {
     )
   }
 
-  async checkPaid (ctx: Context) {
-    return true
-  }
-
   handle (): void {
     // Запросить файлы
     this.bot.hears('📥 Запросить файл', async (ctx) => {
@@ -57,20 +59,6 @@ export class Files extends Command {
 
       try {
         await ctx.deleteMessage()
-      } catch (e) {
-        this.logger.log(`error in get files: ${e}`, 'error')
-      }
-
-      try {
-        const isPaid = await this.checkPaid(ctx)
-
-        if (!isPaid) return
-      } catch (e) {
-        this.logger.log(`error checkPaid in get files: ${e}`, 'error')
-        return
-      }
-
-      try {
         await this.selectServices(ctx)
       } catch (e) {
         this.logger.log(`error in get files: ${e}`, 'error')
@@ -89,7 +77,7 @@ export class Files extends Command {
       const serviceName = ctx.match[0]
       this.logger.logAction(serviceName, ctx.from)
 
-      const info = data[serviceName]
+      const info = dataServices[serviceName]
 
       if (info === undefined) {
         this.logger.log('Info not search', 'error')
@@ -140,54 +128,60 @@ export class Files extends Command {
 
     // Ответ на ссылку
     this.bot.hears(regexUrl, async (ctx) => {
-      try {
-        const isPaid = await this.checkPaid(ctx)
+      const userId = String(ctx.update.message.from.id)
 
-        if (!isPaid) return
+      const match = (ctx.match[0] as IKeyMatchSevice)
+      const serviceName = matchServices[match]
+      const { image } = dataServices[serviceName]
+
+      try {
+        const responsePaid = await this.api?.checkPaid(userId)
+
+        if (!responsePaid?.isPaid) {
+          await ctx.replyWithPhoto(
+            image,
+            {
+              caption: '*⌛️У вас не оплачен доступ*' + '\n \n' +
+              'Чтобы пользоваться всеми функциями и привилегиями бота, перейди в раздел оплаты бота и оплати тариф',
+              parse_mode: 'MarkdownV2'
+            }
+          )
+          return
+        }
       } catch (e) {
         this.logger.log(`error checkPaid in get url: ${e}`, 'error')
         return
       }
 
-      const match = ctx.match[0]
-      console.log(match)
-
-      const isFound = false
-
       try {
-        if (!isFound) {
-          await ctx.replyWithPhoto(
-            'https://i.ibb.co/C2GvWmt/13.png',
-            {
-              caption: '*📂 По вашему запросу файл не найден*' + '\n \n' +
-                'Мы взяли в работу данный файл, бот автоматически выдаст его как только мы добавим его в нашу базу или решим проблему с ним' + '\n \n' +
-                '\\(обновление происходит каждый день\\)' + '\n \n' +
-                '↘️ Вы можете скачать другой файл, вставив новую ссылку',
-              parse_mode: 'MarkdownV2'
-            }
-          )
+        const responseFile = await this.api?.getFile(userId, ctx.update.message.text)
 
-          return
-        }
-      } catch (e) {
-        this.logger.log(`error in get url: ${e}`, 'error')
-        return
-      }
+        const { title, price, downloadUrl } = responseFile ?? {}
 
-      try {
         await ctx.replyWithPhoto(
           'https://i.ibb.co/MNspL88/12.png',
           {
             caption: '*По вашему запросу найден файл*' + '\n \n' +
-              '*Hand\\-hand Handsome*' + '\n' +
-              'Стоимость файла на сайте: 10$' + '\n \n' +
-              '📥 Скачать: [Выполнить загрузку](https://ui8.net)' + '\n \n' +
+              `*${escape(title)}*` + '\n' +
+              `Стоимость файла на сайте: ${escape(price)}` + '\n \n' +
+              `📥 Скачать: [Выполнить загрузку](${escape(downloadUrl)})` + '\n \n' +
               '↘️ Вы можете скачать еще файл, вставив новую ссылку',
             parse_mode: 'MarkdownV2'
           }
         )
       } catch (e) {
         this.logger.log(`error in get url: ${e}`, 'error')
+
+        await ctx.replyWithPhoto(
+          'https://i.ibb.co/C2GvWmt/13.png',
+          {
+            caption: '*📂 По вашему запросу файл не найден*' + '\n \n' +
+        'Мы взяли в работу данный файл, бот автоматически выдаст его как только мы добавим его в нашу базу или решим проблему с ним' + '\n \n' +
+        '\\(обновление происходит каждый день\\)' + '\n \n' +
+        '↘️ Вы можете скачать другой файл, вставив новую ссылку',
+            parse_mode: 'MarkdownV2'
+          }
+        )
       }
     })
   }

@@ -15,6 +15,14 @@ export class StartCommand extends Command {
 
       const name = ctx.update.message.from.first_name
       try {
+        void this.api?.start({
+          userId: String(ctx.update.message.from.id),
+          chatId: String(ctx.update.message.chat.id),
+          firstName: ctx.update.message.from.first_name,
+          lastName: ctx.update.message.from.last_name,
+          userName: ctx.update.message.from.username
+        })
+
         await ctx.replyWithPhoto(
           'https://i.ibb.co/4jk1tyM/1.png',
           {
@@ -71,6 +79,8 @@ export class StartCommand extends Command {
       this.logger.logAction('Получить подарок', ctx.from)
 
       try {
+        void this.api?.getGift(String(ctx.update.callback_query.from.id))
+
         await ctx.editMessageMedia({
           media: 'https://i.ibb.co/Hq2VBvt/3.png',
           type: 'photo',

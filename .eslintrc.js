@@ -17,6 +17,7 @@ module.exports = {
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/restrict-template-expressions': 'off'
+    '@typescript-eslint/restrict-template-expressions': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off'
   }
 }

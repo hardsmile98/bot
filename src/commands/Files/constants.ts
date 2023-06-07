@@ -7,7 +7,16 @@ const services = {
   spline: 'spline'
 }
 
-const data = {
+const matchServices = {
+  'ui8.net': services.ui8net,
+  'craftwork.design': services.craftwork,
+  'ls.graphics': services.ls_graphics,
+  'uihut.com': services.uihunt,
+  'pixsellz.io': services.pixsellz,
+  'spline.one': services.spline
+}
+
+const dataServices = {
   [services.ui8net]: {
     image: 'https://i.ibb.co/9sQspbH/5.png',
     title: 'UI8NET',
@@ -42,8 +51,15 @@ const data = {
 
 const regexUrl = /ui8\.net|craftwork\.design|ls\.graphics|uihut\.com|pixsellz\.io|spline\.one/
 
+type IKeyMatchSevice = keyof typeof matchServices
+
+export type {
+  IKeyMatchSevice
+}
+
 export {
   services,
   regexUrl,
-  data
+  dataServices,
+  matchServices
 }
