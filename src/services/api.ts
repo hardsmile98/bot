@@ -1,11 +1,8 @@
-import { type ICheckPaid, type IFile, type IUser } from './types'
-
-export interface IApi {
-  start: (user: IUser) => Promise<unknown>
-  getGift: (userId: string) => Promise<unknown>
-  checkPaid: (userId: string) => Promise<ICheckPaid>
-  getFile: (userId: string, url: string) => Promise<IFile>
-}
+import {
+  type ICheckPaid,
+  type IUser,
+  type IApi
+} from './types'
 
 export class Api implements IApi {
   apiUrl: string

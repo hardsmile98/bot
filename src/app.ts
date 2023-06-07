@@ -7,7 +7,8 @@ import { type ILogger, Logger } from './logger'
 import { InDeveloping } from './commands/InDeveloping'
 import { Pay } from './commands/Pay'
 import { Files } from './commands/Files'
-import { Api, type IApi } from './services/api'
+import { Api } from './services/api'
+import { type IApi } from './services/types'
 
 class Bot {
   bot: Telegraf
