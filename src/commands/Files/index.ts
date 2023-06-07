@@ -1,18 +1,17 @@
-import { type Context, Markup, type Telegraf } from 'telegraf'
+import { type Context, Markup } from 'telegraf'
 import { Command } from '../Command'
 import { escape } from '../../helpers'
-import { type ILogger } from '../../logger'
 import {
   services,
   dataServices,
   regexUrl,
   matchServices, type IKeyMatchSevice
 } from './constants'
-import { type IApi } from '../../services/api'
+import { type Bot } from '../../app'
 
 export class Files extends Command {
-  constructor (bot: Telegraf, logger: ILogger, api: IApi) {
-    super(bot, logger, api)
+  constructor (bot: Bot) {
+    super(bot)
   }
 
   // Кнопки сервисов
@@ -54,19 +53,19 @@ export class Files extends Command {
 
   handle (): void {
     // Запросить файлы
-    this.bot.hears('📥 Запросить файл', async (ctx) => {
-      this.logger.logAction('Запросить файл', ctx.from)
+    this.bot.bot.hears('📥 Запросить файл', async (ctx) => {
+      this.bot.logger.logAction('Запросить файл', ctx.from)
 
       try {
         await ctx.deleteMessage()
         await this.selectServices(ctx)
       } catch (e) {
-        this.logger.log(`error in get files: ${e}`, 'error')
+        this.bot.logger.log(`error in get files: ${e}`, 'error')
       }
     })
 
     // Кнопка сервиса
-    this.bot.action([
+    this.bot.bot.action([
       services.ui8net,
       services.craftwork,
       services.ls_graphics,
@@ -75,12 +74,12 @@ export class Files extends Command {
       services.spline
     ], async (ctx) => {
       const serviceName = ctx.match[0]
-      this.logger.logAction(serviceName, ctx.from)
+      this.bot.logger.logAction(serviceName, ctx.from)
 
       const info = dataServices[serviceName]
 
       if (info === undefined) {
-        this.logger.log('Info not search', 'error')
+        this.bot.logger.log('Info not search', 'error')
       }
 
       try {
@@ -99,12 +98,12 @@ export class Files extends Command {
           ]
         })
       } catch (e) {
-        this.logger.log(`error in ${serviceName}, ${e}`, 'error')
+        this.bot.logger.log(`error in ${serviceName}, ${e}`, 'error')
       }
     })
 
     // Кнопка назад (выбор сервисов)
-    this.bot.action('select_services', async (ctx) => {
+    this.bot.bot.action('select_services', async (ctx) => {
       try {
         await ctx.editMessageMedia({
           media: 'https://i.ibb.co/bJkm6w4/4.png',
@@ -122,12 +121,12 @@ export class Files extends Command {
           inline_keyboard: this.servicesButtons()
         })
       } catch (e) {
-        this.logger.log('error in select services', 'error')
+        this.bot.logger.log('error in select services', 'error')
       }
     })
 
     // Ответ на ссылку
-    this.bot.hears(regexUrl, async (ctx) => {
+    this.bot.bot.hears(regexUrl, async (ctx) => {
       const userId = String(ctx.update.message.from.id)
 
       const match = (ctx.match[0] as IKeyMatchSevice)
@@ -135,7 +134,7 @@ export class Files extends Command {
       const { image } = dataServices[serviceName]
 
       try {
-        const responsePaid = await this.api?.checkPaid(userId)
+        const responsePaid = await this.bot.api?.checkPaid(userId)
 
         if (!responsePaid?.isPaid) {
           await ctx.replyWithPhoto(
@@ -149,12 +148,12 @@ export class Files extends Command {
           return
         }
       } catch (e) {
-        this.logger.log(`error checkPaid in get url: ${e}`, 'error')
+        this.bot.logger.log(`error checkPaid in get url: ${e}`, 'error')
         return
       }
 
       try {
-        const responseFile = await this.api?.getFile(userId, ctx.update.message.text)
+        const responseFile = await this.bot.api?.getFile(userId, ctx.update.message.text)
 
         const { title, price, downloadUrl } = responseFile ?? {}
 
@@ -170,7 +169,7 @@ export class Files extends Command {
           }
         )
       } catch (e) {
-        this.logger.log(`error in get url: ${e}`, 'error')
+        this.bot.logger.log(`error in get url: ${e}`, 'error')
 
         await ctx.replyWithPhoto(
           'https://i.ibb.co/C2GvWmt/13.png',

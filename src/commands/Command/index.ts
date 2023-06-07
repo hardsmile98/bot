@@ -1,12 +1,8 @@
-import { type Telegraf } from 'telegraf'
-import { type ILogger } from '../../logger'
-import { type IApi } from '../../services/api'
+import { type Bot } from '../../app'
 
 export abstract class Command {
   constructor (
-    public readonly bot: Telegraf,
-    public readonly logger: ILogger,
-    public readonly api?: IApi
+    public readonly bot: Bot
   ) {}
 
   abstract handle (): void

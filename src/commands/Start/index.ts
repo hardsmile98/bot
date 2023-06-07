@@ -1,21 +1,20 @@
-import { Markup, type Telegraf } from 'telegraf'
+import { Markup } from 'telegraf'
 import { Command } from '../Command'
-import { type ILogger } from '../../logger'
-import { type IApi } from '../../services/api'
+import { type Bot } from '../../app'
 
 export class StartCommand extends Command {
-  constructor (bot: Telegraf, logger: ILogger, api: IApi) {
-    super(bot, logger, api)
+  constructor (bot: Bot) {
+    super(bot)
   }
 
   handle (): void {
     // Старт
-    this.bot.start(async (ctx) => {
-      this.logger.logAction('Старт', ctx.update.message.from)
+    this.bot.bot.start(async (ctx) => {
+      this.bot.logger.logAction('Старт', ctx.update.message.from)
 
       const name = ctx.update.message.from.first_name
       try {
-        void this.api?.start({
+        void this.bot.api?.start({
           userId: String(ctx.update.message.from.id),
           chatId: String(ctx.update.message.chat.id),
           firstName: ctx.update.message.from.first_name,
@@ -41,13 +40,13 @@ export class StartCommand extends Command {
           }
         )
       } catch (e) {
-        this.logger.log('error in start', 'error')
+        this.bot.logger.log('error in start', 'error')
       }
     })
 
     // Открыть функции
-    this.bot.action('open_functions', async (ctx) => {
-      this.logger.logAction('Открыть функции', ctx.from)
+    this.bot.bot.action('open_functions', async (ctx) => {
+      this.bot.logger.logAction('Открыть функции', ctx.from)
 
       try {
         await ctx.replyWithPhoto(
@@ -70,16 +69,16 @@ export class StartCommand extends Command {
           ['🔐 Функции в разработке']
         ]).resize())
       } catch (e) {
-        this.logger.log(`error in open functions: ${e}`, 'error')
+        this.bot.logger.log(`error in open functions: ${e}`, 'error')
       }
     })
 
     // Получить подарок
-    this.bot.action('get_gift', async (ctx) => {
-      this.logger.logAction('Получить подарок', ctx.from)
+    this.bot.bot.action('get_gift', async (ctx) => {
+      this.bot.logger.logAction('Получить подарок', ctx.from)
 
       try {
-        void this.api?.getGift(String(ctx.update.callback_query.from.id))
+        void this.bot.api?.getGift(String(ctx.update.callback_query.from.id))
 
         await ctx.editMessageMedia({
           media: 'https://i.ibb.co/Hq2VBvt/3.png',
@@ -91,7 +90,7 @@ export class StartCommand extends Command {
           parse_mode: 'MarkdownV2'
         })
       } catch (e) {
-        this.logger.log(`error in get gift: ${e}', 'error`)
+        this.bot.logger.log(`error in get gift: ${e}', 'error`)
       }
     })
   }

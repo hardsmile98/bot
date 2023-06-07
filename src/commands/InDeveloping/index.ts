@@ -1,16 +1,15 @@
-import { type Telegraf } from 'telegraf'
 import { Command } from '../Command'
-import { type ILogger } from '../../logger'
+import { type Bot } from '../../app'
 
 export class InDeveloping extends Command {
-  constructor (bot: Telegraf, logger: ILogger) {
-    super(bot, logger)
+  constructor (bot: Bot) {
+    super(bot)
   }
 
   handle (): void {
     // В разрботке
-    this.bot.hears('🔐 Функции в разработке', async (ctx) => {
-      this.logger.logAction('Функции в разработке', ctx.from)
+    this.bot.bot.hears('🔐 Функции в разработке', async (ctx) => {
+      this.bot.logger.logAction('Функции в разработке', ctx.from)
 
       try {
         await ctx.deleteMessage()
@@ -31,7 +30,7 @@ export class InDeveloping extends Command {
           }
         )
       } catch (e) {
-        this.logger.log(`error in developing: ${e}`, 'error')
+        this.bot.logger.log(`error in developing: ${e}`, 'error')
       }
     })
   }

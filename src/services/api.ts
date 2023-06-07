@@ -1,20 +1,4 @@
-interface IUser {
-  userId: string
-  firstName: string
-  lastName?: string
-  userName?: string
-  chatId: string
-}
-
-interface ICheckPaid {
-  isPaid: boolean
-}
-
-interface IFile {
-  title: string
-  price: string
-  downloadUrl: string
-}
+import { type ICheckPaid, type IFile, type IUser } from './types'
 
 export interface IApi {
   start: (user: IUser) => Promise<unknown>
@@ -24,7 +8,13 @@ export interface IApi {
 }
 
 export class Api implements IApi {
-  constructor () {}
+  apiUrl: string
+  secretKey: string
+
+  constructor (apiUrl: string, secretKey: string) {
+    this.apiUrl = apiUrl
+    this.secretKey = secretKey
+  }
 
   async start (user: IUser) {
     console.log(`start: ${JSON.stringify(user)}`)

@@ -19,15 +19,18 @@ class Bot {
     this.bot = new Telegraf(this.configService.get('TOKEN'))
     this.bot.use(session())
     this.logger = new Logger()
-    this.api = new Api()
+    this.api = new Api(
+      this.configService.get('API_URL'),
+      this.configService.get('SECRET_KEY')
+    )
   }
 
   init () {
     this.commands = [
-      new StartCommand(this.bot, this.logger, this.api),
-      new InDeveloping(this.bot, this.logger),
-      new Pay(this.bot, this.logger, this.api),
-      new Files(this.bot, this.logger, this.api)
+      new StartCommand(this),
+      new InDeveloping(this),
+      new Pay(this),
+      new Files(this)
     ]
 
     for (const command of this.commands) {
@@ -37,6 +40,8 @@ class Bot {
     void this.bot.launch()
   }
 }
+
+export { Bot }
 
 const bot = new Bot(new ConfigService())
 bot.init()

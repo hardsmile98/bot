@@ -1,20 +1,19 @@
-import { Markup, type Telegraf } from 'telegraf'
+import { Markup } from 'telegraf'
 import { Command } from '../Command'
-import { type ILogger } from '../../logger'
-import { type IApi } from '../../services/api'
+import { type Bot } from '../../app'
 
 export class Pay extends Command {
-  constructor (bot: Telegraf, logger: ILogger, api: IApi) {
-    super(bot, logger, api)
+  constructor (bot: Bot) {
+    super(bot)
   }
 
   handle (): void {
     // Получить доступ
-    this.bot.hears('💎 Полный доступ', async (ctx) => {
-      this.logger.logAction('Полный доступ', ctx.from)
+    this.bot.bot.hears('💎 Полный доступ', async (ctx) => {
+      this.bot.logger.logAction('Полный доступ', ctx.from)
 
       try {
-        const responsePaid = await this.api?.checkPaid(String(ctx.update.message.from.id))
+        const responsePaid = await this.bot.api?.checkPaid(String(ctx.update.message.from.id))
 
         await ctx.deleteMessage()
 
@@ -30,7 +29,7 @@ export class Pay extends Command {
           return
         }
       } catch (e) {
-        this.logger.log(`error in pay: ${e}`, 'error')
+        this.bot.logger.log(`error in pay: ${e}`, 'error')
         return
       }
 
@@ -52,7 +51,7 @@ export class Pay extends Command {
           }
         )
       } catch (e) {
-        this.logger.log(`error in pay: ${e}`, 'error')
+        this.bot.logger.log(`error in pay: ${e}`, 'error')
       }
     })
   }
