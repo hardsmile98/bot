@@ -15,6 +15,7 @@ export class StartCommand extends Command {
       const name = ctx.update.message.from.first_name
       try {
         void this.bot.api?.start({
+          userId: String(ctx.update.message.from.id),
           chatId: String(ctx.update.message.chat.id),
           firstName: ctx.update.message.from.first_name,
           lastName: ctx.update.message.from.last_name,

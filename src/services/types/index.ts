@@ -3,6 +3,7 @@ interface IUser {
   lastName?: string
   userName?: string
   chatId: string
+  userId: string
 }
 
 interface ICheckPaid {
