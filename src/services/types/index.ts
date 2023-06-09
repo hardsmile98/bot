@@ -16,6 +16,7 @@ interface IFile {
 }
 
 interface IApi {
+  init: () => Promise<unknown>
   start: (user: IUser) => Promise<unknown>
   getGift: (userId: string) => Promise<unknown>
   checkPaid: (userId: string) => Promise<ICheckPaid>

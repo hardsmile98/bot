@@ -21,12 +21,13 @@ class Bot {
     this.bot.use(session())
     this.logger = new Logger()
     this.api = new Api(
-      this.configService.get('API_URL'),
-      this.configService.get('SECRET_KEY')
+      this.configService.get('API_URL')
     )
   }
 
-  init () {
+  async init () {
+    await this.api.init()
+
     this.commands = [
       new StartCommand(this),
       new InDeveloping(this),
@@ -45,4 +46,6 @@ class Bot {
 export { Bot }
 
 const bot = new Bot(new ConfigService())
+
 bot.init()
+  .catch((e) => { console.log('Error init bot', e) })

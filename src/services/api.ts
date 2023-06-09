@@ -6,11 +6,21 @@ import {
 
 export class Api implements IApi {
   apiUrl: string
-  secretKey: string
+  token: string | null = null
 
-  constructor (apiUrl: string, secretKey: string) {
+  constructor (apiUrl: string) {
     this.apiUrl = apiUrl
-    this.secretKey = secretKey
+  }
+
+  async init () {
+    console.log('Запрос на получение токена')
+    const token = '12312321'
+
+    if (!token) {
+      throw Error('No token')
+    }
+
+    this.token = token
   }
 
   async start (user: IUser) {
