@@ -8,6 +8,7 @@ import {
   type IKeyMatchSevice
 } from './constants'
 import { type Bot } from '../../app'
+import { type ServiceName } from '../../services/types'
 
 export class Files extends Command {
   constructor (bot: Bot) {
@@ -130,6 +131,7 @@ export class Files extends Command {
       const userId = String(ctx.update.message.from.id)
 
       const match = (ctx.match[0] as IKeyMatchSevice)
+      const serviceName = match.replace('.', '_') as ServiceName
       const { image } = dataServices[match]
 
       try {
@@ -152,7 +154,7 @@ export class Files extends Command {
       }
 
       try {
-        const responseFile = await this.bot.api?.getFile(userId, ctx.update.message.text, match)
+        const responseFile = await this.bot.api?.getFile(userId, ctx.update.message.text, serviceName)
 
         const { title, price, downloadUrl } = responseFile ?? {}
 

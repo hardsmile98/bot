@@ -16,7 +16,7 @@ interface IFile {
   downloadUrl: string
 }
 
-type ServiceName = 'ui8.net' | 'craftwork.design' | 'ls.graphics' | 'uihut.com' | 'pixsellz.io' | 'spline.one'
+type ServiceName = 'ui8_net' | 'craftwork_design' | 'ls_graphics' | 'uihut_com' | 'pixsellz_io' | 'spline_one'
 
 interface IApi {
   init: () => Promise<unknown>
