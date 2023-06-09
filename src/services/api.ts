@@ -1,7 +1,8 @@
 import {
   type ICheckPaid,
   type IUser,
-  type IApi
+  type IApi,
+  type ServiceName
 } from './types'
 
 export class Api implements IApi {
@@ -39,7 +40,7 @@ export class Api implements IApi {
     }
   }
 
-  async getFile (userId: string, url: string) {
+  async getFile (userId: string, url: string, serviceName: ServiceName) {
     console.log(`getFile: ${JSON.stringify(userId)}`)
 
     return {

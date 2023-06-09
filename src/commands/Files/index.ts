@@ -5,7 +5,7 @@ import {
   services,
   dataServices,
   regexUrl,
-  matchServices, type IKeyMatchSevice
+  type IKeyMatchSevice
 } from './constants'
 import { type Bot } from '../../app'
 
@@ -18,16 +18,16 @@ export class Files extends Command {
   servicesButtons () {
     return [
       [
-        Markup.button.callback('UI8NET', services.ui8net),
-        Markup.button.callback('CRAFTWORK', services.craftwork)
+        Markup.button.callback('UI8NET', services['ui8.net']),
+        Markup.button.callback('CRAFTWORK', services['craftwork.design'])
       ],
       [
-        Markup.button.callback('LS. GRAPHICS', services.ls_graphics),
-        Markup.button.callback('UIHUNT', services.uihunt)
+        Markup.button.callback('LS. GRAPHICS', services['ls.graphics']),
+        Markup.button.callback('UIHUNT', services['uihut.com'])
       ],
       [
-        Markup.button.callback('PIXSELLZ', services.pixsellz),
-        Markup.button.callback('SPLINE.ONE', services.spline)
+        Markup.button.callback('PIXSELLZ', services['pixsellz.io']),
+        Markup.button.callback('SPLINE.ONE', services['spline.one'])
       ]
     ]
   }
@@ -66,12 +66,12 @@ export class Files extends Command {
 
     // Кнопка сервиса
     this.bot.bot.action([
-      services.ui8net,
-      services.craftwork,
-      services.ls_graphics,
-      services.uihunt,
-      services.pixsellz,
-      services.spline
+      services['ui8.net'],
+      services['craftwork.design'],
+      services['ls.graphics'],
+      services['uihut.com'],
+      services['pixsellz.io'],
+      services['spline.one']
     ], async (ctx) => {
       const serviceName = ctx.match[0]
       this.bot.logger.logAction(serviceName, ctx.from)
@@ -130,8 +130,7 @@ export class Files extends Command {
       const userId = String(ctx.update.message.from.id)
 
       const match = (ctx.match[0] as IKeyMatchSevice)
-      const serviceName = matchServices[match]
-      const { image } = dataServices[serviceName]
+      const { image } = dataServices[match]
 
       try {
         const responsePaid = await this.bot.api?.checkPaid(userId)
@@ -153,7 +152,7 @@ export class Files extends Command {
       }
 
       try {
-        const responseFile = await this.bot.api?.getFile(userId, ctx.update.message.text)
+        const responseFile = await this.bot.api?.getFile(userId, ctx.update.message.text, match)
 
         const { title, price, downloadUrl } = responseFile ?? {}
 
