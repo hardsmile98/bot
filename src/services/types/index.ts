@@ -6,8 +6,15 @@ interface IUser {
   userId: string
 }
 
-interface ICheckPaid {
-  isPaid: boolean
+type Plan = 'none' | 'free' | 'pro'
+
+interface ICheckPlan {
+  plan: Plan
+  requestsCount: number
+}
+
+interface IStart {
+  isNewUser: boolean
 }
 
 interface IFile {
@@ -20,16 +27,24 @@ type ServiceName = 'ui8_net' | 'craftwork_design' | 'ls_graphics' | 'uihut_com' 
 
 interface IApi {
   init: () => Promise<unknown>
-  start: (user: IUser) => Promise<unknown>
+  start: (user: IUser) => Promise<IStart>
   getGift: (userId: string) => Promise<unknown>
-  checkPaid: (userId: string) => Promise<ICheckPaid>
+  checkPlan: (userId: string) => Promise<ICheckPlan>
   getFile: (userId: string, url: string, serviceName: ServiceName) => Promise<IFile>
+}
+
+interface IRequest {
+  path: string
+  method?: 'get' | 'post' | 'delete'
+  params?: any
+  body?: any
 }
 
 export type {
   IUser,
-  ICheckPaid,
+  ICheckPlan,
   IFile,
   IApi,
-  ServiceName
+  ServiceName,
+  IRequest
 }

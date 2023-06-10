@@ -21,7 +21,9 @@ class Bot {
     this.bot.use(session())
     this.logger = new Logger()
     this.api = new Api(
-      this.configService.get('API_URL')
+      this.configService.get('API_URL'),
+      this.configService.get('ADMIN_LOGIN'),
+      this.configService.get('ADMIN_PASSWORD')
     )
   }
 

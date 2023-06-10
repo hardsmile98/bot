@@ -14,13 +14,23 @@ export class StartCommand extends Command {
 
       const name = ctx.update.message.from.first_name
       try {
-        void this.bot.api?.start({
+        const { isNewUser } = await this.bot.api?.start({
           userId: String(ctx.update.message.from.id),
           chatId: String(ctx.update.message.chat.id),
           firstName: ctx.update.message.from.first_name,
           lastName: ctx.update.message.from.last_name,
           userName: ctx.update.message.from.username
         })
+
+        if (!isNewUser) {
+          await ctx.reply('↘️ Выберите функцию', Markup.keyboard([
+            ['📥 Запросить файл'],
+            ['💎 Полный доступ'],
+            ['🔐 Функции в разработке']
+          ]).resize())
+
+          return
+        }
 
         await ctx.replyWithPhoto(
           'https://i.ibb.co/4jk1tyM/1.png',

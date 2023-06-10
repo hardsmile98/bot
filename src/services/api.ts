@@ -1,21 +1,48 @@
+import axios from 'axios'
 import {
-  type ICheckPaid,
   type IUser,
   type IApi,
-  type ServiceName
+  type ServiceName,
+  type IRequest,
+  type ICheckPlan
 } from './types'
 
 export class Api implements IApi {
   apiUrl: string
+  login: string
+  password: string
+
   token: string | null = null
 
-  constructor (apiUrl: string) {
+  constructor (apiUrl: string, login: string, password: string) {
     this.apiUrl = apiUrl
+    this.login = login
+    this.password = password
+  }
+
+  async request ({ path, method, params, body }: IRequest) {
+    const response = await axios({
+      url: `${this.apiUrl}/api${path}`,
+      method: method ?? 'get',
+      params,
+      data: body,
+      headers: {
+        Authorization: this.token && `Bearer ${this.token}`
+      }
+    })
+
+    return response.data
   }
 
   async init () {
-    console.log('Запрос на получение токена')
-    const token = '12312321'
+    const { token } = await this.request({
+      path: '/auth/login',
+      method: 'post',
+      body: {
+        login: this.login,
+        password: this.password
+      }
+    })
 
     if (!token) {
       throw Error('No token')
@@ -25,28 +52,39 @@ export class Api implements IApi {
   }
 
   async start (user: IUser) {
-    console.log(`start: ${JSON.stringify(user)}`)
+    return await this.request({
+      path: '/users',
+      method: 'post',
+      body: user
+    })
   }
 
   async getGift (userId: string) {
-    console.log(`getGift: ${JSON.stringify(userId)}`)
+    return await this.request({
+      path: '/users/getGift',
+      params: {
+        userId
+      }
+    })
   }
 
-  async checkPaid (userId: string): Promise<ICheckPaid> {
-    console.log(`checkPaid: ${JSON.stringify(userId)}`)
-
-    return {
-      isPaid: true
-    }
+  async checkPlan (userId: string): Promise<ICheckPlan> {
+    return await this.request({
+      path: '/users/checkPlan',
+      params: {
+        userId
+      }
+    })
   }
 
   async getFile (userId: string, url: string, serviceName: ServiceName) {
-    console.log(`getFile: ${JSON.stringify(userId)}`)
-
-    return {
-      title: 'Hand-hand Handsome',
-      price: '10$',
-      downloadUrl: 'https://ui8.net'
-    }
+    return await this.request({
+      path: '/files/file',
+      params: {
+        userId,
+        url,
+        serviceName
+      }
+    })
   }
 }
