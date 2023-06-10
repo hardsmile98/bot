@@ -17,9 +17,9 @@ export class StartCommand extends Command {
         const { isNewUser } = await this.bot.api?.start({
           userId: String(ctx.update.message.from.id),
           chatId: String(ctx.update.message.chat.id),
-          firstName: ctx.update.message.from.first_name,
-          lastName: ctx.update.message.from.last_name,
-          userName: ctx.update.message.from.username
+          firstName: ctx.update.message.from.first_name ?? '-',
+          lastName: ctx.update.message.from.last_name ?? '-',
+          userName: ctx.update.message.from.username ?? '-'
         })
 
         if (!isNewUser) {
