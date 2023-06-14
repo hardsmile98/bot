@@ -87,4 +87,36 @@ export class Api implements IApi {
       }
     })
   }
+
+  async createPayment (userId: string) {
+    return await this.request({
+      path: '/payments',
+      method: 'post',
+      body: {
+        userId
+      }
+    })
+  }
+
+  async savePayment (uuid: string, userId: string, messageId: string) {
+    return await this.request({
+      path: '/payments/save',
+      method: 'post',
+      body: {
+        uuid,
+        userId,
+        messageId
+      }
+    })
+  }
+
+  async checkPayment (userId: string, messageId: string) {
+    return await this.request({
+      path: '/payments',
+      params: {
+        userId,
+        messageId
+      }
+    })
+  }
 }
