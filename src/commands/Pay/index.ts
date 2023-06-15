@@ -48,10 +48,11 @@ export class Pay extends Command {
               parse_mode: 'MarkdownV2'
             }
           )
+
           return
         }
       } catch (e) {
-        this.bot.logger.log(`error in pay: ${e}`, 'error')
+        this.bot.logger.log(`error in pay (chekPlan): ${e}`, 'error')
         return
       }
 
@@ -67,7 +68,7 @@ export class Pay extends Command {
           payments.id
         )
       } catch (e) {
-        this.bot.logger.log(`error in pay: ${e}`, 'error')
+        this.bot.logger.log(`error in pay (createPayment): ${e}`, 'error')
       }
     })
 
