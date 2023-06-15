@@ -1,6 +1,7 @@
 import { type Context, Markup } from 'telegraf'
 import { Command } from '../Command'
 import { type Bot } from '../../app'
+import { escape } from '../../helpers'
 
 export class Pay extends Command {
   constructor (bot: Bot) {
@@ -95,7 +96,7 @@ export class Pay extends Command {
       this.bot.logger.logAction('Проверка оплаты', ctx.from)
 
       try {
-        const { isPaid } = await this.bot.api.checkPayment(
+        const { isPaid, confirmationUrl } = await this.bot.api.checkPayment(
           String(ctx.update.callback_query.from.id),
           String(ctx.update.callback_query.message?.message_id)
         )
@@ -107,6 +108,21 @@ export class Pay extends Command {
             caption: '*🎉 У вас уже оплачен доступ*' + '\n \n' +
                 'Тебе доступны все функции бота и ты запросто можешь ими пользоваться без ограничений',
             parse_mode: 'MarkdownV2'
+          })
+        } else {
+          await ctx.editMessageMedia({
+            media: 'https://i.ibb.co/NL38Bm4/17.png',
+            type: 'photo',
+            caption: '*❌ Платёж не прошёл или возникли технические неполадки*' + '\n \n' +
+                `Попробуй оплатить [заново](${escape(confirmationUrl)})` + '\n \n' +
+                'Или обратись в тех\\.поддержку @toqmen',
+            parse_mode: 'MarkdownV2'
+          })
+
+          await ctx.editMessageReplyMarkup({
+            inline_keyboard: [[
+              Markup.button.callback('✅ Проверить оплату', 'check_pay')
+            ]]
           })
         }
       } catch (e) {

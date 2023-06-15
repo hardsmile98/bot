@@ -53,6 +53,7 @@ interface IPayment {
 
 interface ICheckPayment {
   isPaid: boolean
+  confirmationUrl: string | undefined
 }
 
 type ServiceName = 'ui8_net' | 'craftwork_design' | 'ls_graphics' | 'uihut_com' | 'pixsellz_io' | 'spline_one'
