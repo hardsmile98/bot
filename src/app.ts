@@ -9,6 +9,7 @@ import { Pay } from './commands/Pay'
 import { Files } from './commands/Files'
 import { Api } from './services/api'
 import { type IApi } from './services/types'
+import { Profile } from './commands/Profile'
 
 class Bot {
   bot: Telegraf
@@ -34,7 +35,8 @@ class Bot {
       new StartCommand(this),
       new InDeveloping(this),
       new Pay(this),
-      new Files(this)
+      new Files(this),
+      new Profile(this)
     ]
 
     for (const command of this.commands) {
