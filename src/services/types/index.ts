@@ -8,11 +8,19 @@ interface IUser {
 
 type Plan = 'none' | 'free' | 'pro'
 
-interface ICheckPlan {
+interface IProfile {
+  id: number
+  chatId: string
+  userId: string
+  firstName: string
+  lastName: string
+  userName: string
   plan: Plan
+  planDate: string | null
+  savedMoney: number
   requestsCount: number
+  createdAt: string
 }
-
 interface IStart {
   isNewUser: boolean
 }
@@ -62,7 +70,7 @@ interface IApi {
   init: () => Promise<unknown>
   start: (user: IUser) => Promise<IStart>
   getGift: (userId: string) => Promise<unknown>
-  checkPlan: (userId: string) => Promise<ICheckPlan>
+  getProfile: (userId: string) => Promise<IProfile>
   getFile: (userId: string, url: string, serviceName: ServiceName) => Promise<IFile>
   createPayment: (userId: string) => Promise<IPayment>
   checkPayment: (userId: string, messageId: string) => Promise<ICheckPayment>
@@ -78,7 +86,7 @@ interface IRequest {
 
 export type {
   IUser,
-  ICheckPlan,
+  IProfile,
   IFile,
   IApi,
   ServiceName,

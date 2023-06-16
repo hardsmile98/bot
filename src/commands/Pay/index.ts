@@ -36,7 +36,7 @@ export class Pay extends Command {
       this.bot.logger.logAction('Полный доступ', ctx.from)
 
       try {
-        const responsePaid = await this.bot.api?.checkPlan(String(ctx.update.message.from.id))
+        const responsePaid = await this.bot.api?.getProfile(String(ctx.update.message.from.id))
 
         await ctx.deleteMessage()
 

@@ -135,7 +135,7 @@ export class Files extends Command {
       const { image } = dataServices[match]
 
       try {
-        const responsePlan = await this.bot.api?.checkPlan(userId)
+        const responsePlan = await this.bot.api?.getProfile(userId)
 
         const isPaid = responsePlan.plan === 'pro' || (responsePlan.plan === 'free' && responsePlan.requestsCount < 3)
 

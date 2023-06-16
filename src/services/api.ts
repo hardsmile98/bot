@@ -4,7 +4,7 @@ import {
   type IApi,
   type ServiceName,
   type IRequest,
-  type ICheckPlan
+  type IProfile
 } from './types'
 
 export class Api implements IApi {
@@ -68,9 +68,9 @@ export class Api implements IApi {
     })
   }
 
-  async checkPlan (userId: string): Promise<ICheckPlan> {
+  async getProfile (userId: string): Promise<IProfile> {
     return await this.request({
-      path: '/users/checkPlan',
+      path: '/users/profile',
       params: {
         userId
       }
