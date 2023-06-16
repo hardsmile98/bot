@@ -14,7 +14,7 @@ export class StartCommand extends Command {
 
       const name = ctx.update.message.from.first_name
       try {
-        const { isNewUser } = await this.bot.api?.start({
+        const { isNewUser, isPaid } = await this.bot.api?.start({
           userId: String(ctx.update.message.from.id),
           chatId: String(ctx.update.message.chat.id),
           firstName: ctx.update.message.from.first_name ?? '-',
@@ -25,7 +25,9 @@ export class StartCommand extends Command {
         if (!isNewUser) {
           await ctx.reply('↘️ Выберите функцию', Markup.keyboard([
             ['📥 Запросить файл'],
-            ['💎 Полный доступ'],
+            [isPaid
+              ? '👾 Мой аккаунт'
+              : '💎 Полный доступ'],
             ['🔐 Функции в разработке']
           ]).resize())
 

@@ -23,6 +23,7 @@ interface IProfile {
 }
 interface IStart {
   isNewUser: boolean
+  isPaid: boolean
 }
 
 interface IFile {
