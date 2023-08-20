@@ -9,7 +9,7 @@ export interface ILogger {
 
 export class Logger implements ILogger {
   log (message: string, type: ILogType = 'info') {
-    console.log(`LOG | ${type} | ${message}`)
+    console.log(`LOG | ${type} | ${new Date().toLocaleString()} |${message}`)
   }
 
   logAction (actionName: string, user?: User) {

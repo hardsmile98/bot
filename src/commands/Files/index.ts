@@ -175,7 +175,7 @@ export class Files extends Command {
           }
         )
       } catch (e) {
-        this.bot.logger.log(`error in get url: ${e}`, 'error')
+        this.bot.logger.log(`file in not found (${ctx.update.message.text})`)
 
         await ctx.replyWithPhoto(
           'https://i.ibb.co/C2GvWmt/13.png',
