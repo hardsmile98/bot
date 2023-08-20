@@ -1,5 +1,5 @@
 import { type User } from 'telegraf/typings/core/types/typegram'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 
 type ILogType = 'info' | 'error' | 'warning'
 
@@ -10,7 +10,7 @@ export interface ILogger {
 
 export class Logger implements ILogger {
   log (message: string, type: ILogType = 'info') {
-    console.log(`LOG | ${type} | ${format(new Date(), 'dd-MM-yyyy HH:mm:ss')} |${message}`)
+    console.log(`LOG | ${type} | ${format(parseISO(new Date().toISOString()), 'dd-MM-yyyy HH:mm:ss', { })} |${message}`)
   }
 
   logAction (actionName: string, user?: User) {
