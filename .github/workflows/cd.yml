@@ -22,4 +22,4 @@ jobs:
           git status
           npm i
           npm run build
-          pm2 restart app
+          pm2 restart bot-design
