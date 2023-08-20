@@ -10,7 +10,7 @@ export interface ILogger {
 
 export class Logger implements ILogger {
   log (message: string, type: ILogType = 'info') {
-    console.log(`LOG | ${type} | ${format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'")} |${message}`)
+    console.log(`LOG | ${type} | ${format(new Date(), 'dd-MM-yyyy HH:mm:ss')} |${message}`)
   }
 
   logAction (actionName: string, user?: User) {
