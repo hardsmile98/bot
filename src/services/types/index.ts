@@ -74,8 +74,8 @@ interface IApi {
   getProfile: (userId: string) => Promise<IProfile>
   getFile: (userId: string, url: string, serviceName: ServiceName) => Promise<IFile>
   createPayment: (userId: string) => Promise<IPayment>
-  checkPayment: (userId: string, messageId: string) => Promise<ICheckPayment>
-  savePayment: (uuid: string, userId: string, messageId: string) => Promise<unknown>
+  checkPayment: (userId: string) => Promise<ICheckPayment>
+  savePayment: (uuid: string, userId: string) => Promise<unknown>
 }
 
 interface IRequest {

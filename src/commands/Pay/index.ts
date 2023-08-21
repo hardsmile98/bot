@@ -9,7 +9,7 @@ export class Pay extends Command {
   }
 
   async sendPayUrl (ctx: Context, userId: string, url: string, uuid: string) {
-    const message = await ctx.replyWithPhoto(
+    await ctx.replyWithPhoto(
       'https://i.ibb.co/XDQ1pPC/14.png',
       {
         caption: '*👾 Чтобы пользоваться всеми функциями и привилегиями бота, необходимо оплатить доступ*' + '\n \n' +
@@ -27,7 +27,7 @@ export class Pay extends Command {
         ])
       }
     )
-    await this.bot.api.savePayment(uuid, userId, String(message.message_id))
+    await this.bot.api.savePayment(uuid, userId)
   }
 
   handle (): void {
@@ -97,15 +97,14 @@ export class Pay extends Command {
 
       try {
         const { isPaid, confirmationUrl } = await this.bot.api.checkPayment(
-          String(ctx.update.callback_query.from.id),
-          String(ctx.update.callback_query.message?.message_id)
+          String(ctx.update.callback_query.from.id)
         )
 
         if (isPaid) {
           await ctx.editMessageMedia({
             media: 'https://i.ibb.co/zmZHNYM/16.png',
             type: 'photo',
-            caption: '*🎉 У вас уже оплачен доступ*' + '\n \n' +
+            caption: '*🎉 У вас оплачен доступ*' + '\n \n' +
                 'Тебе доступны все функции бота и ты запросто можешь ими пользоваться без ограничений',
             parse_mode: 'MarkdownV2'
           })
