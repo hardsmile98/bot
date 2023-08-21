@@ -32,6 +32,12 @@ interface IFile {
   downloadUrl: string
 }
 
+interface IGetFile {
+  file: IFile | null
+  isFound: boolean
+  haveAccess: boolean
+}
+
 interface IPayment {
   id: string
   status: string
@@ -72,7 +78,7 @@ interface IApi {
   start: (user: IUser) => Promise<IStart>
   getGift: (userId: string) => Promise<unknown>
   getProfile: (userId: string) => Promise<IProfile>
-  getFile: (userId: string, url: string, serviceName: ServiceName) => Promise<IFile>
+  getFile: (userId: string, url: string, serviceName: ServiceName) => Promise<IGetFile>
   createPayment: (userId: string) => Promise<IPayment>
   checkPayment: (userId: string) => Promise<ICheckPayment>
 }

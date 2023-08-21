@@ -159,23 +159,47 @@ export class Files extends Command {
       }
 
       try {
-        const responseFile = await this.bot.api?.getFile(userId, ctx.update.message.text, serviceName)
+        const url = ctx.update.message.text
 
-        const { title, price, downloadUrl } = responseFile ?? {}
+        const responseFile = await this.bot.api?.getFile(userId, url, serviceName)
 
-        await ctx.replyWithPhoto(
-          'https://i.ibb.co/MNspL88/12.png',
-          {
-            caption: '*По вашему запросу найден файл*' + '\n \n' +
-              `*${escape(title)}*` + '\n' +
-              `Стоимость файла на сайте: ${escape(price)}` + '\n \n' +
-              `📥 Скачать: [Выполнить загрузку](${escape(downloadUrl)})` + '\n \n' +
-              '↘️ Вы можете скачать еще файл, вставив новую ссылку',
-            parse_mode: 'MarkdownV2'
-          }
-        )
-      } catch (e) {
-        this.bot.logger.log(`file in not found (${ctx.update.message.text})`)
+        const { file, isFound, haveAccess } = responseFile ?? {}
+
+        if (!haveAccess) {
+          this.bot.logger.log(`Запрос файла (${url}) userID: ${userId} - доступ ограничен`)
+
+          await ctx.replyWithPhoto(
+            image,
+            {
+              caption: '*⌛️У вас не оплачен доступ*' + '\n \n' +
+              'Чтобы пользоваться всеми функциями и привилегиями бота, перейди в раздел оплаты бота и оплати тариф',
+              parse_mode: 'MarkdownV2',
+              ...Markup.inlineKeyboard([
+                Markup.button.callback('Оплатить доступ', 'go_to_pay')
+              ])
+            }
+          )
+          return
+        }
+
+        if (isFound && file) {
+          this.bot.logger.log(`Запрос файла (${url}) userID: ${userId} - файл получен`)
+
+          await ctx.replyWithPhoto(
+            'https://i.ibb.co/MNspL88/12.png',
+            {
+              caption: '*По вашему запросу найден файл*' + '\n \n' +
+                `*${escape(file.title)}*` + '\n' +
+                `Стоимость файла на сайте: ${file.price}$` + '\n \n' +
+                `📥 Скачать: [Выполнить загрузку](${escape(file.downloadUrl)})` + '\n \n' +
+                '↘️ Вы можете скачать еще файл, вставив новую ссылку',
+              parse_mode: 'MarkdownV2'
+            }
+          )
+          return
+        }
+
+        this.bot.logger.log(`Запрос файла (${url}) userID: ${userId} - файл не найден`)
 
         await ctx.replyWithPhoto(
           'https://i.ibb.co/C2GvWmt/13.png',
@@ -187,6 +211,9 @@ export class Files extends Command {
             parse_mode: 'MarkdownV2'
           }
         )
+      } catch (e) {
+        console.log(e)
+        this.bot.logger.log(`error in getFile (${ctx.update.message.text})`, 'error')
       }
     })
   }
