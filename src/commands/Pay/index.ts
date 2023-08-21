@@ -27,7 +27,6 @@ export class Pay extends Command {
         ])
       }
     )
-    await this.bot.api.savePayment(uuid, userId)
   }
 
   handle (): void {
