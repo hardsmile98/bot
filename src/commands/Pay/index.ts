@@ -8,7 +8,7 @@ export class Pay extends Command {
     super(bot)
   }
 
-  async sendPayUrl (ctx: Context, userId: string, url: string, uuid: string) {
+  async sendPayUrl (ctx: Context, url: string) {
     await ctx.replyWithPhoto(
       'https://i.ibb.co/XDQ1pPC/14.png',
       {
@@ -63,9 +63,7 @@ export class Pay extends Command {
 
         await this.sendPayUrl(
           ctx,
-          String(ctx.update.message.from.id),
-          payments.confirmation.confirmation_url,
-          payments.id
+          payments.confirmation.confirmation_url
         )
       } catch (e) {
         this.bot.logger.log(`error in pay (createPayment): ${e}`, 'error')
@@ -82,9 +80,7 @@ export class Pay extends Command {
 
         await this.sendPayUrl(
           ctx,
-          String(ctx.update.callback_query.from.id),
-          payments.confirmation.confirmation_url,
-          payments.id
+          payments.confirmation.confirmation_url
         )
       } catch (e) {
         this.bot.logger.log(`error in go to pay: ${e}`, 'error')
